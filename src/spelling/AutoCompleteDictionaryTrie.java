@@ -23,12 +23,12 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	
 	
 	/**
-     *  Insert a word into the trie.
-     * For the basic part of the assignment (part 2), you should convert the 
+     * Insert a word into the trie.
+     * You should convert the 
      * string to all lower case before you insert it. 
      * 
      * This method adds a word by creating and linking the necessary trie nodes 
-     * into the trie, as described outlined in the videos for this week. It 
+     * into the trie, as described in the slides for this week. It 
      * should appropriately use existing nodes in the trie, only creating new 
      * nodes when necessary. E.g. If the word "no" is already in the trie, 
      * then adding the word "now" would add only one additional node 
@@ -99,7 +99,7 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
     	 // This method should implement the following algorithm:
     	 // 1. Find the stem in the trie.  If the stem does not appear in the trie, return an
     	 //    empty list
-    	 // 2. Once the stem is found, perform a breadth first search to generate completions
+    	 // 2. Once the stem is found, perform a levelorder (breadth first) search to generate completions
     	 //    using the following algorithm:
     	 //    Create a queue (LinkedList) and add the node that completes the stem to the back
     	 //       of the list.
