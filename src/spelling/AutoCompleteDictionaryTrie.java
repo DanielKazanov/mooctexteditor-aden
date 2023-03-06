@@ -20,6 +20,10 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
     private int size;
     
     //TODO: Add the constructor here
+    public AutoCompleteDictionaryTrie() {
+    	root = new TrieNode();
+    	size = 0;
+    }
 	
 	
 	/**
@@ -40,8 +44,28 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
      */
 	public boolean addWord(String word)
 	{
-	    //TODO: Implement this method
-	    return false;
+		TrieNode parent = root;
+		TrieNode child = null;
+		word = word.toLowerCase();
+		boolean added = false;
+		
+		for (int i = 0; i < word.length(); i++) {
+			child = parent.getChild(word.charAt(i));
+			
+			if (child == null) {
+				child = parent.insert(word.charAt(i));
+			}
+			
+			parent = child;
+		}
+		
+		if (!child.endsWord()) {
+			added = true;
+			child.setEndsWord(added);
+			size++;
+		}
+		
+	    return added;
 	}
 	
 	/**
@@ -53,8 +77,7 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	 */
 	public int size()
 	{
-	    //TODO: Implement this method
-	    return -1;
+		return size;
 	}
 	
 	
@@ -68,8 +91,21 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	@Override
 	public boolean isWord(String s) 
 	{
-	    //TODO: Implement this method
-		return false;
+		TrieNode parent = root;
+		TrieNode child = null;
+		s = s.toLowerCase();
+		
+		for (int i = 0; i < s.length(); i++) {
+			child = parent.getChild(s.charAt(i));
+			
+			if (child == null) {
+				return false;
+			}
+			
+			parent = child;
+		}
+		
+		return parent.endsWord();
 	}
 
 	/** 
@@ -109,8 +145,28 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
     	 //       If it is a word, add it to the completions list
     	 //       Add all of its child nodes to the back of the queue
     	 // Return the list of completions
+    	 List<String> completions = new LinkedList<String>();
     	 
-         return null;
+    	 TrieNode root = findStem(prefix);
+    	 if (root == null) {
+    		 return completions;
+    	 }
+    	 prefix = prefix.toLowerCase();
+    	 
+    	 Queue<TrieNode> queue = new LinkedList<TrieNode>();
+    	 queue.add(root);
+    	 
+    	 while (!queue.isEmpty() && completions.size() < numCompletions) {
+    		 TrieNode temporary = queue.remove();
+    		 
+    		 if (isWord(temporary.getText())) {
+    			 completions.add(temporary.getText());
+    		 }
+    		 
+    		 addChildrenToQueue(queue, temporary);
+    	 }
+    	 
+    	 return completions;
      }
 
 
@@ -124,8 +180,21 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
     	 // TODO: Implement this method
     	 // This method should find the "stem" in the Trie, and return the TrieNode of the last letter
     	 // in the stem, if it exists in the Trie. Return null if the stem does not exist in the Trie
+    	 TrieNode parent = root;
+    	 TrieNode child = null;
+    	 stem = stem.toLowerCase();
     	 
-    	 return null;
+ 		for (int i = 0; i < stem.length(); i++) {
+			child = parent.getChild(stem.charAt(i));
+			
+			if (child == null) {
+				return null;
+			}
+			
+			parent = child;
+ 		}
+ 		
+    	 return parent;
      }
      
      /**
@@ -135,8 +204,9 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
       * @param parent the parent
       */
      private void addChildrenToQueue(Queue<TrieNode> queue, TrieNode parent) {
-    	 // TODO: Implement this method by getting the list of all existing children characters (keys) of the parent
-    	 //       node, and then add the corresponding TrieNode to the queue
+    	 for (char c : parent.getValidNextCharacters()) {
+    		 queue.add(parent.getChild(c));
+    	 }
      }
      
      
