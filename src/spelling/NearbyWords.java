@@ -171,6 +171,11 @@ public class NearbyWords implements SpellingSuggest {
 	   System.out.println("Spelling Suggestions for \""+word+"\" are:");
 	   System.out.println(suggest);
 
+	   
+	   word = "spiel";
+	   suggest = w.suggestions(word, 10);
+	   System.out.println("Spelling Suggestions for \""+word+"\" are:");
+	   System.out.println(suggest);
    }
 
 }
