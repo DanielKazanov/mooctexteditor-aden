@@ -77,7 +77,7 @@ public class NearbyWords implements SpellingSuggest {
 	 * @return
 	 */
 	public void insertions(String s, List<String> currentList, boolean wordsOnly ) {
-		for (int index = 0; index < s.length(); index++) {
+		for (int index = 0; index <= s.length(); index++) {
 			for (int charCode = (int)'a'; charCode <= (int)'z'; charCode++) {
 				StringBuffer sb = new StringBuffer(s);
 				sb.insert(index, (char)charCode);
@@ -139,11 +139,12 @@ public class NearbyWords implements SpellingSuggest {
 		
 		while (queue.size() != 0 && retList.size() < numSuggestions && visited.size() < threshold) {
 			curr = queue.remove();
-			List<String> mutations = distanceOne(curr, false);
+			List<String> mutations = distanceOne(curr, true);
 			
 			for (int i = 0; i < mutations.size(); i++) {
 				if (!visited.contains(mutations.get(i))) {
 					queue.add(mutations.get(i));
+					visited.add(curr);
 					
 					if (dict.isWord(mutations.get(i))) {
 						retList.add(mutations.get(i));
@@ -170,7 +171,6 @@ public class NearbyWords implements SpellingSuggest {
 	   List<String> suggest = w.suggestions(word, 10);
 	   System.out.println("Spelling Suggestions for \""+word+"\" are:");
 	   System.out.println(suggest);
-
 	   
 	   word = "spiel";
 	   suggest = w.suggestions(word, 10);
