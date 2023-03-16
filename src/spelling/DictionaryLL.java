@@ -22,6 +22,9 @@ public class DictionaryLL implements Dictionary
      * @return true if the word was added to the dictionary 
      * (it wasn't already there). */
     public boolean addWord(String word) {
+    	if (dict.contains(word.toLowerCase())) {
+    		return false;
+    	}
     	return dict.add(word.toLowerCase());
     }
 
@@ -29,7 +32,7 @@ public class DictionaryLL implements Dictionary
     /** Return the number of words in the dictionary */
     public int size()
     {
-    	return dict.size() - 1;
+    	return dict.size();
     }
 
     /** Is this a word according to this dictionary? */
